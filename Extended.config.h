@@ -22,7 +22,7 @@
 #define LED_STATUS_ON_STATE           LOW //         LOW, Use HIGH so indicator stays on when connected if needed.            Option
 
 // PASSWORD ------------------------------------------------------------------------------------------------------------------------
-#define PASSWORD_DEFAULT       "password" //  "password", Adjust as required, this can be changed at runtime also.            Adjust
+#define PASSWORD_DEFAULT       "galileo1" //"password" //  "password", Adjust as required, this can be changed at runtime also.            Adjust
                                           //              password for runtime access to network settings.
 
 // BLE GAMEPAD SETTINGS (ESP32 ONLY) ------------------------------------------- see https://onstep.groups.io/g/developer/wiki/22427
@@ -38,11 +38,11 @@
 // These settings are stored in NV (EEPROM) and will not revert to the defaults once first set from the values below unless
 // NV is wiped, these settings (where applicable) can be changed at runtime however.
 #define AP_ENABLED                   true //        true, Wifi Access Point Enabled.                                          Adjust
-#define AP_SSID                  "ONSTEP" //    "ONSTEP", Wifi Access Point SSID.                                             Adjust
-#define AP_PASSWORD            "password" //  "password", Wifi Access Point password.                                         Adjust
+#define AP_SSID            "OnStepAP-SWS" //"ONSTEP" //    "ONSTEP", Wifi Access Point SSID.                                             Adjust
+#define AP_PASSWORD            "galileo1" //"password" //  "password", Wifi Access Point password.                                         Adjust
 #define AP_CHANNEL                      7 //           7, Wifi Access Point channel.                                          Adjust
-#define AP_IP_ADDR          (192,168,0,1) // ..,168,0,1), Wifi Access Point IP Address.                                       Adjust
-#define AP_GW_ADDR          (192,168,0,1) // ..,168,0,1), Wifi Access Point GATEWAY Address.                                  Adjust
+#define AP_IP_ADDR          (192,168,10,1) // ..,168,0,1), Wifi Access Point IP Address.                                       Adjust
+#define AP_GW_ADDR          (192,168,10,1) // ..,168,0,1), Wifi Access Point GATEWAY Address.                                  Adjust
 #define AP_SN_MASK        (255,255,255,0) // ..55,255,0), Wifi Access Point SUBNET Mask.                                      Adjust
 
 #define STA_ENABLED                 false //       false, Wifi Station Enabled.                                               Adjust
