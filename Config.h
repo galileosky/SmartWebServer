@@ -21,9 +21,9 @@
 #define OPERATIONAL_MODE             WIFI //   WIFI, Or use ETHERNET_W5100 or ETHERNET_W5500                                 <-Req'd
 
 // SERIAL PORTS --------------------------------------------------------------------------------------------------------------------
-#define SERIAL_BAUD_DEFAULT        230400 //9600 //   9600, Common baud rates for this parameter are 9600,19200,57600,115200,etc.    Infreq
+#define SERIAL_BAUD_DEFAULT        460800 //9600 //   9600, Common baud rates for this parameter are 9600,19200,57600,115200,etc.    Infreq
                                           //         The OnStep serial port this is wired to must use the same rate above.
-#define SERIAL_BAUD                230400 //57600 //  57600, Or use 19200,57600,115200. For 230400,460800 set all three to the same rate
+#define SERIAL_BAUD                460800 //57600 //  57600, Or use 19200,57600,115200. For 230400,460800 set all three to the same rate
                                           //         (OnStep and here.)  Automatically uses 19200 if talking to a Mega2560 OnStep.
 #define SERIAL_SWAP                    ON //AUTO //   AUTO, Automatic check both, ON for swapped port or OFF for default port only.  Infreq
                                           //         this option is ignored in ETHERNET modes
