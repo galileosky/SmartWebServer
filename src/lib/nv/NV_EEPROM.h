@@ -5,10 +5,14 @@
 
 #include <Arduino.h>
 
-#if !defined(ARDUINO_ARCH_SAMD)
+#if !defined(ARDUINO_ARDUINO_NANO33BLE) && !defined(ARDUINO_ARCH_SAMD) && !defined(ARDUINO_ARCH_MBED_RP2040) && !defined(ARDUINO_ARCH_RP2040)
 
   #include "NV.h"
-  #include "EEPROM.h"
+  
+  // don't bring in the EEPROM library here if this is an Mega2560, etc.
+  #ifndef __AVR__
+    #include "EEPROM.h"
+  #endif
 
   #if defined(E2END)
 

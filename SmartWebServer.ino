@@ -2,7 +2,7 @@
  * Title       OnStep Smart Web Server
  * by          Howard Dutton
  *
- * Copyright (C) 2016 to 2021 Howard Dutton
+ * Copyright (C) 2016 to 2023 Howard Dutton
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,71 +30,91 @@
  */
 
 #define Product "Smart Web Server"
-#define FirmwareVersionMajor  "1"
-#define FirmwareVersionMinor  "0"
-#define FirmwareVersionPatch  "a"
+#define FirmwareVersionMajor  "2"
+#define FirmwareVersionMinor  "06"
+#define FirmwareVersionPatch  "f"
 
 // Use Config.h to configure the SWS to your requirements
 
 #include "src/Common.h"
 NVS nv;
-#include "src/tasks/OnTask.h"
-Tasks tasks;
-#include "src/commands/Commands.h"
-#include "src/ethernetServers/EthernetServers.h"
-#include "src/wifiServers/WifiServers.h"
-#include "src/bleGamepad/BleGamepad.h"
-#include "src/encoders/Encoders.h"
+#include "src/lib/tasks/OnTask.h"
+#include "src/libApp/cmd/Cmd.h"
+#include "src/libApp/bleGamepad/BleGamepad.h"
+#include "src/libApp/encoders/Encoders.h"
 #include "src/pages/Pages.h"
-#include "src/status/MountStatus.h"
+#include "src/libApp/status/Status.h"
 
-bool connected = false;
+#include "src/lib/ethernet/cmdServer/CmdServer.h"
+#include "src/lib/ethernet/webServer/WebServer.h"
+#include "src/lib/wifi/cmdServer/CmdServer.h"
+#include "src/lib/wifi/webServer/WebServer.h"
+
+#if DEBUG == PROFILER
+  extern void profiler();
+#endif
+
+#if COMMAND_SERVER == PERSISTENT || COMMAND_SERVER == BOTH
+  CmdServer persistentCmdSvr1(9996, 10L*1000L, true);
+  #if OPERATIONAL_MODE != ETHERNET_W5100
+    CmdServer persistentCmdSvr2(9997, 10L*1000L, true);
+  #endif
+  CmdServer persistentCmdSvr3(9998, 10L*1000L, true);
+#endif
+
+#if COMMAND_SERVER == STANDARD || COMMAND_SERVER == BOTH
+  CmdServer cmdSvr(9999, 1L*1000L);
+#endif
 
 void systemServices() {
   nv.poll();
 }
 
+void pollWebSvr() {
+  www.handleClient();
+}
+
+void pollCmdSvr() {
+  #if COMMAND_SERVER == PERSISTENT || COMMAND_SERVER == BOTH
+    persistentCmdSvr1.handleClient(); Y;
+    #if OPERATIONAL_MODE != ETHERNET_W5100
+      persistentCmdSvr2.handleClient(); Y;
+    #endif
+    persistentCmdSvr3.handleClient(); Y;
+  #endif
+
+  #if COMMAND_SERVER == STANDARD || COMMAND_SERVER == BOTH
+    cmdSvr.handleClient(); Y;
+  #endif
+}
+
 void setup(void) {
+  #if OPERATIONAL_MODE == WIFI
+    WiFi.disconnect();
+    WiFi.softAPdisconnect(true);
+  #endif
+
   strcpy(firmwareVersion.str, FirmwareVersionMajor "." FirmwareVersionMinor FirmwareVersionPatch);
 
   // start debug serial port
-  if (DEBUG == ON || DEBUG == VERBOSE) SERIAL_DEBUG.begin(SERIAL_DEBUG_BAUD);
+  if (DEBUG == ON || DEBUG == VERBOSE || DEBUG == PROFILER) SERIAL_DEBUG.begin(SERIAL_DEBUG_BAUD);
   delay(2000);
 
-  VF("SWS: SmartWebServer "); VL(firmwareVersion.str);
-  VF("SWS: MCU =  "); VF(MCU_STR); V(", "); VF("Pinmap = "); VLF(PINMAP_STR);
+  VF("MSG: SmartWebServer "); VL(firmwareVersion.str);
+  VF("MSG: MCU = "); VF(MCU_STR); V(", "); VF("Pinmap = "); VLF(PINMAP_STR);
+
+  delay(2000);
 
   // call gamepad BLE initialization
-  #if BLE_GAMEPAD == ON
-    VLF("SWS: Init BLE");
+  #if (BLE_GAMEPAD == ON && ESP32)
+    VLF("MSG: Init BLE");
     bleInit();
   #endif
 
   // call hardware specific initialization
-  VLF("SWS: Init HAL");
+  VLF("MSG: Init HAL");
   HAL_INIT();
-
-  // System services
-  // add task for system services, runs at 10ms intervals so commiting 1KB of NV takes about 10 seconds
-  VF("SWS: Setup, starting system services task (rate 10ms priority 7)... ");
-  if (tasks.add(10, 0, true, 7, systemServices, "SysSvcs")) { VL("success"); } else { VL("FAILED!"); }
-
-  // if requested, cause defaults to be written back into NV
-  if (NV_WIPE == ON) { nv.update(EE_KEY_HIGH, (int16_t)0); nv.update(EE_KEY_LOW, (int16_t)0); }
-
-  // read settings from NV or init. as required
-  VLF("SWS: Init Encoders");
-  encoders.init();
-
-  VLF("SWS: Init Webserver");
-  #if OPERATIONAL_MODE == WIFI
-    wifiInit();
-  #else
-    ethernetInit();
-  #endif
-
-  // init is done, write the NV key if necessary
-  nv.update(EE_KEY_HIGH, (int16_t)NV_KEY_HIGH); nv.update(EE_KEY_LOW, (int16_t)NV_KEY_LOW);
+  HAL_NV_INIT();
 
   #if LED_STATUS != OFF
     pinMode(LED_STATUS_PIN, OUTPUT);
@@ -102,153 +122,188 @@ void setup(void) {
 
   // attempt to connect to OnStep
   int serialSwap = OFF;
-  if (OPERATIONAL_MODE == WIFI) serialSwap = SERIAL_SWAP;
+  serialSwap = SERIAL_SWAP;
   if (serialSwap == AUTO) serialSwap = AUTO_OFF;
 
   long serial_baud = SERIAL_BAUD;
-  serialBegin(SERIAL_BAUD_DEFAULT, serialSwap);
+  onStep.serialBegin(SERIAL_BAUD_DEFAULT, serialSwap);
   uint8_t tb = 1;
 
 Again:
-  VLF("SWS: Clearing serial channel");
-  clearSerialChannel();
+  VLF("MSG: Clearing serial channel");
+  onStep.clearSerialChannel();
 
   // look for OnStep
-  VLF("SWS: Attempting to contact OnStep");
+  VLF("MSG: Attempting to contact OnStep");
   SERIAL_ONSTEP.print(":GVP#"); delay(100);
   String s = SERIAL_ONSTEP.readString();
-  if (s == "On-Step#" || s == "OnStepX#") {
+  if (s == "On-Step#") {
     // if there is more than one baud rate specified
     if (SERIAL_BAUD != SERIAL_BAUD_DEFAULT) {
       // get fastest baud rate, Mega2560 returns '4' for 19200 baud recommended
       SERIAL_ONSTEP.print(":GB#"); delay(100);
-      if (SERIAL_ONSTEP.available() != 1) { serialRecvFlush(); goto Again; }
+      if (SERIAL_ONSTEP.available() != 1) { onStep.serialRecvFlush(); goto Again; }
       if (SERIAL_ONSTEP.read() == '4' && serial_baud > 19200) serial_baud = 19200;
       // set faster baud rate
-      SERIAL_ONSTEP.print(highSpeedCommsStr(serial_baud)); delay(100);
-      if (SERIAL_ONSTEP.available() != 1) { serialRecvFlush(); goto Again; }
+      SERIAL_ONSTEP.print(onStep.highSpeedCommsStr(serial_baud)); delay(100);
+      if (SERIAL_ONSTEP.available() != 1) { onStep.serialRecvFlush(); goto Again; }
       if (SERIAL_ONSTEP.read() != '1') goto Again;
     }
 
     // we're all set, just change the baud rate to match OnStep
-    serialBegin(serial_baud, serialSwap);
+    onStep.serialBegin(serial_baud, serialSwap);
 
-    connected = true;
-    VLF("SWS: OnStep Connection established");
+    #if DEBUG == REMOTE
+      debugRemoteConnected = true;
+    #endif
+    
+    VLF("MSG: OnStep Connection established");
   } else {
-    if (DEBUG == ON || DEBUG == VERBOSE) { VF("SWS: No valid reply found ("); V(s); VL(")"); }
+    if (DEBUG == ON || DEBUG == VERBOSE) { VF("MSG: No valid reply found ("); V(s); VL(")"); }
     #if LED_STATUS == ON
       digitalWrite(LED_STATUS_PIN, LED_STATUS_OFF_STATE);
     #endif
     // got nothing back, toggle baud rate and/or swap ports
-    serialRecvFlush();
+    onStep.serialRecvFlush();
     tb++;
     if (tb == 16) { tb = 1; if (serialSwap == AUTO_OFF) serialSwap = AUTO_ON; else if (serialSwap == AUTO_ON) serialSwap = AUTO_OFF; }
-    if (tb == 1) serialBegin(SERIAL_BAUD_DEFAULT, serialSwap);
-    if (tb == 6) serialBegin(serial_baud, serialSwap);
-    if (tb == 11) { if (SERIAL_BAUD_DEFAULT == 9600) { serialBegin(19200, serialSwap); } else tb = 15; }
+    if (tb == 1) onStep.serialBegin(SERIAL_BAUD_DEFAULT, serialSwap);
+    if (tb == 6) onStep.serialBegin(serial_baud, serialSwap);
+    if (tb == 11) { if (SERIAL_BAUD_DEFAULT == 9600) { onStep.serialBegin(19200, serialSwap); } else tb = 15; }
     goto Again;
   }
+  onStep.clearSerialChannel();
 
-  #if BLE_GAMEPAD == ON
-    bleSetup();
-  #endif
-  
-  // bring servers up
-  clearSerialChannel();
+  // System services
+  // add task for system services, runs at 10ms intervals so commiting 1KB of NV takes about 10 seconds
+  VF("MSG: Setup, starting system services");
+  VF(" task (rate 10ms priority 7)... ");
+  if (tasks.add(10, 0, true, 7, systemServices, "SysSvcs")) { VL("success"); } else { VL("FAILED!"); }
 
-  VLF("SWS: Starting port 80 web svr");
+  // get NV ready
+  if (!nv.isKeyValid(INIT_NV_KEY)) {
+    VF("MSG: NV, invalid key wipe "); V(nv.size); VLF(" bytes");
+    if (nv.verify()) { VLF("MSG: NV, ready for reset to defaults"); }
+  } else { VLF("MSG: NV, correct key found"); }
+
+  // get the command and web timeouts
+  if (!nv.hasValidKey()) {
+    nv.write(NV_TIMEOUT_CMD, (int16_t)cmdTimeout);
+    nv.write(NV_TIMEOUT_WEB, (int16_t)webTimeout);
+  }
+  cmdTimeout = nv.readUI(NV_TIMEOUT_CMD);
+  webTimeout = nv.readUI(NV_TIMEOUT_WEB);
+
+  // bring network servers up
   #if OPERATIONAL_MODE == WIFI
-    wifiStart();
+    VLF("MSG: Init WiFi");
+    wifiManager.init();
   #else
-    ethernetStart();
+    VLF("MSG: Init Ethernet");
+    ethernetManager.init();
   #endif
 
-  VLF("SWS: Set webpage handlers");
-  server.on("/index.htm", handleRoot);
-  server.on("/configuration.htm", handleConfiguration);
-  server.on("/configurationA.txt", configurationAjaxGet);
-  server.on("/settings.htm", handleSettings);
-  server.on("/settingsA.txt", settingsAjaxGet);
-  server.on("/settings.txt", settingsAjax);
+  // ready encoders
+  VLF("MSG: Initialize Encoders");
+  encoders.init();
+
+  // init is done, write the NV key if necessary
+  if (!nv.hasValidKey()) {
+    nv.writeKey((uint32_t)INIT_NV_KEY);
+    nv.wait();
+    if (!nv.isKeyValid(INIT_NV_KEY)) { DLF("ERR: NV, failed to read back key!"); } else { VLF("MSG: NV, reset complete"); }
+  }
+
+  VLF("MSG: Set webpage handlers");
+  www.on("/index.htm", handleRoot);
+  www.on("/index-ajax-get.txt", indexAjaxGet);
+  www.on("/index.txt", indexAjax);
+
+  www.on("/mount.htm", handleMount);
+  www.on("/mount-ajax-get.txt", mountAjaxGet);
+  www.on("/mount-ajax.txt", mountAjax);
+  www.on("/libraryHelp.htm", handleLibraryHelp);
+
+  www.on("/rotator.htm", handleRotator);
+  www.on("/rotator-ajax-get.txt", rotatorAjaxGet);
+  www.on("/rotator-ajax.txt", rotatorAjax);
+
+  www.on("/focuser.htm", handleFocuser);
+  www.on("/focuser-ajax-get.txt", focuserAjaxGet);
+  www.on("/focuser-ajax.txt", focuserAjax);
+
+  www.on("/auxiliary.htm", handleAux);
+  www.on("/auxiliary-ajax-get.txt", auxAjaxGet);
+  www.on("/auxiliary-ajax.txt", auxAjax);
+
   #if ENCODERS == ON
-    server.on("/enc.htm", handleEncoders);
-    server.on("/encA.txt", encAjaxGet);
-    server.on("/enc.txt", encAjax);
+    www.on("/enc.htm", handleEncoders);
+    www.on("/enc-ajax-get.txt", encAjaxGet);
+    www.on("/enc-ajax.txt", encAjax);
   #endif
-  server.on("/library.htm", handleLibrary);
-  server.on("/libraryA.txt", libraryAjaxGet);
-  server.on("/library.txt", libraryAjax);
-  server.on("/control.htm", handleControl);
-  server.on("/controlA.txt", controlAjaxGet);
-  server.on("/control.txt", controlAjax);
-  server.on("/auxiliary.htm", handleAux);
-  server.on("/auxiliaryA.txt", auxAjaxGet);
-  server.on("/auxiliary.txt", auxAjax);
-  server.on("/pec.htm", handlePec);
-  server.on("/pec.txt", pecAjax);
-  server.on("/net.htm", handleNetwork);
-  server.on("/", handleRoot);
+
+  www.on("/net.htm", handleNetwork);
+
+  www.on("/", handleRoot);
   
-  server.onNotFound(handleNotFound);
+  www.onNotFound(handleNotFound);
 
-  #if STANDARD_COMMAND_CHANNEL == ON
-    VLF("SWS: Starting port 9999 cmd svr");
-    #if OPERATIONAL_MODE == WIFI
-      cmdSvr.begin();
-      cmdSvr.setNoDelay(true);
-    #else
-      cmdSvr.init(9999, 500);
+  #if COMMAND_SERVER == PERSISTENT || COMMAND_SERVER == BOTH
+    #if OPERATIONAL_MODE != ETHERNET_W5100
+      VLF("MSG: Starting port 9996 cmd server");
+      persistentCmdSvr3.begin();
+      VLF("MSG: Starting port 9997 cmd server");
+      persistentCmdSvr2.begin();
     #endif
+    VLF("MSG: Starting port 9998 cmd server");
+    persistentCmdSvr1.begin();
   #endif
 
-  #if PERSISTENT_COMMAND_CHANNEL == ON && OPERATIONAL_MODE == WIFI
-    VLF("SWS: Starting port 9998 persistant cmd svr");
-    persistentCmdSvr.begin();
-    persistentCmdSvr.setNoDelay(true);
+  #if COMMAND_SERVER == STANDARD || COMMAND_SERVER == BOTH
+    VLF("MSG: Starting port 9999 cmd server");
+    cmdSvr.begin();
   #endif
 
-  #if OPERATIONAL_MODE == WIFI
-    VLF("SWS: Starting port 80 web svr");
-    server.begin();
-  #endif
+  VLF("MSG: Starting port 80 web server");
+  www.begin();
 
   // allow time for the background servers to come up
   delay(2000);
 
   // clear the serial channel one last time
-  clearSerialChannel();
+  onStep.clearSerialChannel();
 
-  #if ENCODERS == ON
-    VLF("SWS: Starting encoders");
-    encoders.init();
-  #endif
-
-  if (mountStatus.valid()) {
-    mountStatus.update(false);
+  if (status.onStepFound) {
+    status.update();
     delay(100);
   }
-    
-  VLF("SWS: SmartWebServer ready");
+
+  state.init();
+
+  VF("MSG: Setup, starting cmd channel polling");
+  VF(" task (rate 5ms priority 2)... ");
+  if (tasks.add(5, 0, true, 2, pollCmdSvr, "cmdPoll")) { VL("success"); } else { VL("FAILED!"); }
+
+  VF("MSG: Setup, starting web server polling");
+  VF(" task (rate 20ms priority 3)... ");
+  if (tasks.add(20, 0, true, 3, pollWebSvr, "webPoll")) { VL("success"); } else { VL("FAILED!"); }
+
+  // start task manager debug events
+  #if DEBUG == PROFILER
+    tasks.add(142, 0, true, 7, profiler, "Profilr");
+  #endif
+
+  #if (BLE_GAMEPAD == ON && ESP32)
+    bleSetup();
+  #endif
+
+  VLF("MSG: SmartWebServer ready");
 }
 
 void loop(void) {
-  server.handleClient();
-
-  #if ENCODERS == ON
-    encoders.poll();
-  #endif
-  
-  #if BLE_GAMEPAD == ON
-    bleTimers();
-    bleConnTest(); 
-  #endif
-
-  #if OPERATIONAL_MODE == WIFI
-    wifiCommandChannel();
-    wifiPersistantCommandChannel();
-  #else
-    ethernetCommandChannel();
+  #if (BLE_GAMEPAD == ON && ESP32)
+    bleTimers(); Y;
+    bleConnTest(); Y;
   #endif
 
   tasks.yield();

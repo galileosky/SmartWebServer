@@ -22,6 +22,7 @@
 
 #define L_NONE "没有"
 #define L_AUTO "自动"
+#define L_SET_LABEL "放"
 #define L_OK "Ok"
 #define L_ON "开"
 #define L_OFF "关"
@@ -38,14 +39,19 @@
 #define L_RANGE "范围"
 #define L_UNKNOWN "未知"
 #define L_FAULT "故障"
+#define L_POINT "观点"
+#define L_COMPLETE "完全的"
+#define L_ACTIVE "积极的"
+#define L_INACTIVE "不活跃"
+#define L_BEST "最好的"
 
 // ---------------------------- Index ----------------------------
 // date/time
 #define L_TIME_BROWSER_UT "UT (网络浏览器)"
 
 // weather
-#define L_TELE_TEMPERATURE "望远镜温度"
-#define L_TEMPERATURE "环境温度"
+#define L_TEMPERATURE "温度"
+#define L_AMBIENT_TEMPERATURE "环境温度"
 #define L_PRESSURE "气压"
 #define L_HUMIDITY "相对湿度"
 #define L_DEW_POINT "露点温度"
@@ -76,23 +82,26 @@
 #define L_PARK_FAILED "停车失败"
 
 // home
+#define L_HOMING "归位"
 #define L_AT_HOME "在原位"
-#define L_INGOTO "快速定位"
+#define L_SLEWING "快速定位"
 #define L_PPS_SYNC "同步卫星信号"
 
 // tracking
-#define L_REFR_COMP_RA "参考相对RA轴"
-#define L_REFR_COMP_BOTH "两个轴的参考补偿"
-#define L_FULL_COMP_RA "完整的RA轴"
-#define L_FULL_COMP_BOTH "完全补偿两个轴"
+#define L_REFR_COMP_RA "RC"
+#define L_REFR_COMP_BOTH "RCD"
+#define L_FULL_COMP_RA "FC"
+#define L_FULL_COMP_BOTH "FCD"
 #define L_TRACKING "追踪"
-#define L_TRACKING_RATE "跟踪速度"
 #define L_CURRENT_MAXRATE "当前最大速率"
 #define L_DEFAULT_MAXRATE "标准最大速率"
 #define L_CURRENT_MAXSLEW "最大平移速度"
 
+#define L_FREQUENCY_ADJUST "频率调整"
+
 // driver status
-#define L_DRIVER_STATUS "运转"
+#define L_DRIVER "运转"
+#define L_STATUS "状态"
 #define L_STATE "状态"
 #define L_COMMS_FAILURE "命令失败"
 #define L_STANDSTILL "停止"
@@ -128,6 +137,7 @@
   #define SIDEREAL_CH "&#9733;"
   #define LUNAR_CH "&#9790;"
   #define SOLAR_CH "&#9737;"
+  #define KING_CH "&#9812;"
 #else
   #define HOME_CH "H"
   #define ARROW_DR "-&gt;"
@@ -146,6 +156,7 @@
   #define SIDEREAL_CH "*"
   #define LUNAR_CH "("
   #define SOLAR_CH "O"
+  #define KING_CH "K"
 #endif
 
 #define BUTTON_N "N"
@@ -154,26 +165,19 @@
 #define BUTTON_W "W"
 #define BUTTON_SYNC "@"
 
-#define L_CENTER_RATE "定心"
-#define L_FIND_RATE "搜索"
-#define L_FAST_RATE "快速"
-#define L_VFAST_RATE "非常快"
-
 #define L_HINT_CLOCK "设置日期/时间"
 #define L_HINT_CONTINUE_GOTO "继续转到（如果在原位）"
-#define L_HINT_FIND_HOME "搜索起始位置"
-#define L_HINT_RESET_HOME "原始位置（重置）"
-#define L_HINT_UNPARK "取消停车"
-#define L_HINT_PARK "停车"
+#define L_HOME_PARK_TITLE "归巢和停车"
+#define L_FIND_HOME "搜索起始位置"
+#define L_RESET_HOME "原始位置（重置）"
+#define L_UNPARK "取消停车"
+#define L_PARK "停车"
 #define L_HINT_EMERGENCY_STOP "紧急停止!"
 #define L_HINT_RATE_SIDEREAL "恒星速"
 #define L_HINT_RATE_LUNAR "月球速"
 #define L_HINT_RATE_SOLAR "太阳速"
+#define L_HINT_RATE_KING "特大价"
 #define L_HINT_FOC_SEL "选择聚焦器"
-#define L_HINT_FOC_FIND_HOME "搜索焦点原位"
-#define L_HINT_FOC_RESET_HOME "主页（重置）聚焦器"
-#define L_HINT_ROT_FIND_HOME "搜索旋转轴首页"
-#define L_HINT_ROT_RESET_HOME "主页（重置）聚焦器"
 #define L_HINT_DEROTATE_ON "取消旋转"
 #define L_HINT_ROTATOR_REV "反向旋转方向"
 #define L_HINT_ROTATOR_PAR "将旋转器移至赤道角"
@@ -184,6 +188,7 @@
 
 #define L_FOCUSER "聚焦器"
 #define L_ROTATOR "旋转器"
+#define L_DEROTATOR "反义词"
 #define L_CAMERA_EXPOSURE "接触"
 #define L_CAMERA_DELAY "延迟"
 #define L_CAMERA_COUNT "计数"
@@ -207,6 +212,7 @@
 #define L_CAT_NO_NAME "所选目录没有名称."
 #define L_CAT_GET_NAME_FAIL "所选目录的名称选择失败."
 #define L_CAT_NO_CAT "未选择目录."
+#define L_CAT_NO_OBJECT "未选择对象."
 #define L_SELECTED "已选择"
 #define L_CAT_DOWNLOAD_FAIL "下载失败,数据无效."
 #define L_CAT_DOWNLOAD_SUCCESS "下载成功."
@@ -235,30 +241,16 @@
 // --------------------------- Encoders --------------------------
 
 // general settings
-#define L_ENC_SYNC_TO_ENC "将OnStep同步到编码器"
-#define L_ENC_SYNC_TO_ONS "将编码器同步到OnStep"
-#define L_ENC_ZERO_TO_ONS "将绝对编码器零设置为OnStep"
-#define L_ENC_AUTO_SYNC "将OnStep自动同步到编码器"
+#define L_ENC_SYNC_TO_ENC "同步 OnStep -> 编码器"
+#define L_ENC_SYNC_TO_ONS "同步 编码器 -> OnStep"
+#define L_ENC_ORIGIN_TO_ONS "设置 OnStep -> 编码器原点"
+#define L_ENC_AUTO_SYNC "自动同步 编码器 -> OnStep"
 #define L_ENC_CONF "编码器配置"
 #define L_ENC_SET_TPD "每度数"
-#define L_ENC_MAX_ANGLE "最大角度距离（编码器与OnStep相比）"
-#define L_ENC_MAX_ANGLE_AXIS1 "（轴1，弧秒0到9999）"
-#define L_ENC_MAX_ANGLE_AXIS2 "（轴2，弧秒0到9999）"
+#define L_ENC_SYNC_THLD "同步阈值"
+#define L_ENC_SYNC_THLD_UNITS "0 到 9999 弧秒"
 #define L_ENC_AUTO_RATE "步速控制"
-#define L_ENC_SYNC_NOW "目前"
-
-// encoder rate control
-#define L_ENC_BINNED_SAMPLES "平均编码器值（合并）"
-#define L_ENC_SAMPLES "平均编码器值（值）"
-#define L_ENC_PROPORTIONAL "比例响应"
-#define L_ENC_MIN_GUIDE "最小跟踪速度"
-#define L_ENC_RATE_COMP "编码器速度补偿"
-#define L_ENC_MAGN "范围"
-#define L_ENC_PHASE "相位"
-#define L_ENC_COUNTS "数字"
-#define L_ENC_STAT_RATE_AXIS1 "轴1速率（恒星）"
-#define L_ENC_STAT_INTPOL_COMP "补偿之间"
-#define L_ENC_STAT_INTPOL_PHASE "初始阶段"
+#define L_NOW "目前"
 
 // ------------------------------ PEC ----------------------------
 
@@ -271,7 +263,7 @@
 #define L_PEC_CLEAR_MESSAGE "擦除但擦除存储器，而不擦除EEPROM。在捕获期间，校正平均为3：1，除非擦除，否则首选缓冲区。在这种情况下使用了完整的更正."
 #define L_PEC_EEWRITE "写入EEPROM"
 #define L_PEC_EEWRITE_MESSAGE "将 定期错误校正 数据写入EEPROM，以便在控制器重新启动时可以使用。写入数据可能需要几秒钟."
-#define L_PEC_NO_PEC_MESSAGE "已停用 定期错误校正 控制"
+#define L_DISABLED_MESSAGE "已禁用"
 #define L_PEC_IDLE "闲"
 #define L_PEC_WAIT_PLAY "正在等待开始播放"
 #define L_PEC_PLAYING "播放"
@@ -290,6 +282,7 @@
 
 #define L_PARK "停车"
 #define L_SET_PARK "设置停车位置"
+#define L_SET_PARK_CURRENT_COORDS "在当前坐标处设置停放位置"
 
 #define L_TRK_FASTER "跟进"
 #define L_TRK_SLOWER "更快"
@@ -305,6 +298,7 @@
 #define L_MERIDIAN_FLIP_AUTO "越过边界时自动翻转子午线"
 #define L_MERIDIAN_FLIP_NOW "目前"
 #define L_MERIDIAN_FLIP_PAUSE "子午线翻转期间在原始位置暂停"
+#define L_MERIDIAN_FLIP_PPS "经络翻转, 首选码头侧"
 
 // ------------------------ Configuration ------------------------
 
@@ -313,21 +307,25 @@
 #define L_MAX_SLEW_SPEED "最大回转速度"
 
 // goto Rate
-#define L_VSLOW "非常慢 (0.5x)"
-#define L_SLOW "慢 (0.75x)"
-#define L_NORMAL "正常 (1x)"
-#define L_FAST "快速 (1.5x)"
-#define L_VFAST "更快 (2x)"
+#define L_VSLOW "非常慢 0.5x"
+#define L_SLOW "慢 0.75x"
+#define L_NORMAL "正常 1x"
+#define L_FAST "快速 1.5x"
+#define L_VFAST "更快 2x"
 
 // backlash
+#define L_BACKLASH "间隙"
 #define L_BACKLASH_RANGE_AXIS1 "间隙，以弧秒为单位，0到3600"
 #define L_BACKLASH_RANGE_AXIS2 "间隙，以弧秒为单位，0到3600"
-#define L_BACKLASH_RANGE_AXIS345 "间隙，在步骤0到32767中"
+#define L_BACKLASH_RANGE_AXIS3UP "间隙，在步骤0到32767中"
 
 // deadband/TCF
-#define L_DEADBAND_RANGE_AXIS45 "TCF死区，在步骤1至32767中"
-#define L_TCF_COEF_RANGE_AXIS45 "TCF系数，以微米/度为单位。 C -999.0至999.0"
-#define L_TCF_COEF_EN_AXIS45 "TCF启用，0假或1真"
+#define L_DEADBAND "TCF 死区"
+#define L_TCF_COEF "TCF 系数"
+#define L_TCF_COEF_EN "TCF 启用"
+#define L_DEADBAND_RANGE_AXIS4UP "TCF死区，在步骤1至32767中"
+#define L_TCF_COEF_RANGE_AXIS4UP "TCF系数，以微米/度为单位。C &pm;999.0"
+#define L_TCF_COEF_EN_AXIS4UP "TCF启用，0假或1真"
 
 // limits
 #define L_LIMITS_TITLE "范围和开销限制"
@@ -337,7 +335,7 @@
 #define L_LIMITS_RANGE_MERIDIAN_W "如果将望远镜放在坐骑西侧，则指向子午线，以+/- 270度为单位"
 
 // location
-#define L_LOCATION_TITLE "站点纬度，经度，UTC偏移"
+#define L_LOCATION_TITLE "时间地点"
 #define L_LOCATION_LONG "经度，以度和分钟为单位。+/-180，W为+"
 #define L_LOCATION_LAT "纬度，以度和分钟为单位。+/-90，N为+"
 #define L_LOCATION_RANGE_UTC_OFFSET "UTC 偏移，以-14到+12小时为单位"
@@ -346,27 +344,43 @@
 // advanced configuration
 #define L_REVERT "还原为默认值"
 #define L_ADV_SET_TITLE "高级"
-#define L_ADV_SET_HEADER_MSG "重新启动 OnStep 后，以下更改将生效:"
-#define L_ADV_MOUNT_TYPE "选择 1 GEM, 2 EQ Fork, 3 Alt/Azm"
+#define L_ADV_SET_HEADER_MSG "除非另有说明，否则以下更改将在重新启动 OnStep 后生效:"
+#define L_ADV_MOUNT_TYPE " 选择 1 GEM, 2 EQ Fork, 3 Alt/Azm"
+#define L_ADV_BOOL "0 假或 1 真"
 
 #define L_ADV_SET_SPWR "蠕虫旋转的步骤数（0禁用）"
 #define L_ADV_SET_SPD "每度步数"
 #define L_ADV_SET_SPM "每微米步数"
-#define L_ADV_SET_us  "微步"
-#define L_ADV_SET_ma  "电流以毫安为单位，<i>小心！</i>"
 #define L_ADV_SET_REV "反向，0假或1真"
 #define L_ADV_SET_MIN "最低位置"
 #define L_ADV_SET_MAX "最大位置"
+
+#define L_ADV_SET_SPECIAL "步进/方向驱动器：<br /><br />值为-1相当于Config.h OFF。 <i>谨慎使用这些！</i>"
+#define L_ADV_SET_IMMEDIATE "伺服驱动器：<br /><br />设置立即生效，无需重启。 <i>谨慎使用这些！</i>"
+#define L_ADV_SET_TRAK_us "微步"
+#define L_ADV_SET_GOTO_us "微步转到"
+#define L_ADV_SET_HOLD_ma "mA 保持电流"
+#define L_ADV_SET_TRAK_ma "mA 跟踪电流"
+#define L_ADV_SET_SLEW_ma "mA 转换电流"
+#define L_ADV_SET_P "追踪 成比例的"
+#define L_ADV_SET_I "追踪 不可缺少的"
+#define L_ADV_SET_D "追踪 衍生物"
+#define L_ADV_SET_P_GOTO "回转 成比例的"
+#define L_ADV_SET_I_GOTO "回转 不可缺少的"
+#define L_ADV_SET_D_GOTO "回转 衍生物"
+
 #define L_ADV_ENABLE "启用高级配置"
 #define L_ADV_DISABLE "禁用高级配置（重新启动时所有默认设置）。"
+#define L_ADV_SET_AXIS_NO_EDIT "目前禁用此轴的编辑 。"
 #define L_ADV_SET_NO_EDIT "目前禁止所有轴的编辑。可能未启用此功能，或者您需要重新启动OnStep。"
 #define L_ADV_SET_FOOTER_MSG1 "在按下[Upload]后，请注意上述更改，因为上载可能由于参数无效而被拒绝。"
 #define L_ADV_SET_FOOTER_MSG2 "当您选择[还原]时，该组将不可编辑，直到您重新启动OnStep。"
-#define L_ADV_SET_FOOTER_MSG3 "如果将IRUN设置为默认值Config.h以外的其他值，则会禁用IHOLD和IGOTO（关闭）."
+#define L_ADV_SET_FOOTER_MSG3 "如果 IRUN 设置为非 Config.h 默认值，则 IHOLD 设置为 50% (HALF)。"
 #define L_ADV_SET_FOOTER_MSG4 "更改每蠕虫蠕虫的Axis1步进数和每度步进数的比率可能会损坏Library NV存储区，如果需要，请首先备份所有目录。"
 
 // reset control
 #define L_RESET_TITLE "OnStep 重置控制:"
+#define L_WIPE_RESET "重置设置并重新启动 OnStep"
 #define L_RESET "重启 OnStep"
 #define L_RESET_FWU "重启 OnStep 用于固件上传"
 #define L_RESET_MSG1 "OnStep 必须处于“在家”或“停放”状态，否则重置请求将被忽略."
@@ -410,7 +424,7 @@
 // --------------------------- Constants -------------------------
 
 #define L_DOWN_TITLE "未连接到OnStep的串行接口!"
-#define L_DOWN_MESSAGE1 "如果波特率不符，请重新打开电源会有所帮助。<br /> <br />"
+#define L_DOWN_MESSAGE1 "如果波特率不符，请重新打开电源会有所帮助。"
 #define L_DOWN_MESSAGE2 "其他可能的原因：<br /> <ul>"
 #define L_DOWN_MESSAGE3 "配置错误的OnStep波特率."
 #define L_DOWN_MESSAGE4 "ESP波特率配置错误."
@@ -418,15 +432,16 @@
 #define L_DOWN_MESSAGE6 "COM端口的电缆连接不正确（如果交换了RX / TX，则会损坏硬件。）"
 #define L_DOWN_MESSAGE7 "电源引脚的接线错误。OnStep的MCU与附加模块的MCU之间必须接地（GND）"
 
-#define L_PAGE_STATUS "状态"
-#define L_PAGE_CONTROL "控制"
-#define L_PAGE_AUX "辅助的"
+#define L_CONTROLLER "状态"
+#define L_PAGE_MOUNT "控制"
+#define L_PAGE_AUXILIARY "辅助的"
 #define L_PAGE_LIBRARY "库"
 #define L_PAGE_ENCODERS "编码器"
 #define L_PAGE_PEC "定期校正"
-#define L_PAGE_SETTINGS "设置"
+#define L_SETTINGS "设置"
+#define L_CONTROLS "控件"
 #define L_PAGE_CONFIG "配置"
-#define L_PAGE_SETUP "网络"
+#define L_PAGE_NETWORK "网络"
 
 // ------------------------- MountStatus -------------------------
 
