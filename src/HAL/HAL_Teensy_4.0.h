@@ -1,16 +1,21 @@
 // Platform setup ------------------------------------------------------------------------------------
+// Teensy4.0
+#pragma once
+
 // We define a more generic symbol, in case more Teensy boards based on different lines are supported
 #define __TEENSYDUINO__
-#pragma once
 
 // New symbol for the default I2C port ---------------------------------------------------------------
 #include <Wire.h>
 #define HAL_Wire Wire
-#define HAL_WIRE_CLOCK 100000
+#ifndef HAL_WIRE_CLOCK
+  #define HAL_WIRE_CLOCK 100000
+#endif
 
 // Non-volatile storage ------------------------------------------------------------------------------
-#ifdef NV_DEFAULT
+#if NV_DRIVER == NV_DEFAULT
   #include "../lib/nv/NV_EEPROM.h"
+  #define HAL_NV_INIT() 
 #endif
 
 // Default serial port where OnStep is attached ------------------------------------------------------
@@ -23,9 +28,6 @@
 //-----------------------------------------------------------------------------------------------------
 // Misc. includes and defines to support this processor's operation
 // #include "imxrt.h"
-#define IRAM_ATTR
-#define ICACHE_RAM_ATTR
-#define FPSTR
 #ifdef EmptyStr
   #undef EmptyStr
 #endif

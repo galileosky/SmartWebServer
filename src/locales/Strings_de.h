@@ -31,7 +31,8 @@
 
 #define L_NONE "Kein"
 #define L_AUTO "Auto"
-#define L_OK "OK"
+#define L_SET_LABEL "Set"
+#define L_OK "Tun"
 #define L_ON "An"
 #define L_OFF "Aus"
 #define L_START "Anfang"
@@ -47,14 +48,19 @@
 #define L_RANGE "Bereich"
 #define L_UNKNOWN "Unbekannt"
 #define L_FAULT "Fehler"
+#define L_POINT "Punkt"
+#define L_COMPLETE "Vollständig"
+#define L_ACTIVE "Aktiv"
+#define L_INACTIVE "Inaktiv"
+#define L_BEST "Am besten"
 
 // ---------------------------- Index ----------------------------
 // date/time
 #define L_TIME_BROWSER_UT "UT (Webbrowser)"
 
 // weather
-#define L_TELE_TEMPERATURE "Teleskoptemperatur"
-#define L_TEMPERATURE "Umgebungstemperatur"
+#define L_TEMPERATURE "Temperatur"
+#define L_AMBIENT_TEMPERATURE "Umgebungstemperatur"
 #define L_PRESSURE "Luftdruck"
 #define L_HUMIDITY "Relative Luftfeuchte"
 #define L_DEW_POINT "Taupunkt-Temperatur"
@@ -85,27 +91,30 @@
 #define L_PARK_FAILED "Parken fehlgeschlagen"
 
 // home
+#define L_HOMING "Referenzfahrt"
 #define L_AT_HOME "Bei Homeposition"
-#define L_INGOTO "Schwenke"
+#define L_SLEWING "Schwenke"
 #define L_PPS_SYNC "PPS Sync"
 
 // tracking
-#define L_REFR_COMP_RA "Refr. Komp. RA Achse"
-#define L_REFR_COMP_BOTH "Refr. Komp. Beide Achsen"
-#define L_FULL_COMP_RA "Volle Komp. RA Achse"
-#define L_FULL_COMP_BOTH "Volle Komp. Beide Achsen"
+#define L_REFR_COMP_RA "RC"
+#define L_REFR_COMP_BOTH "RCD"
+#define L_FULL_COMP_RA "FC"
+#define L_FULL_COMP_BOTH "FCD"
 #define L_TRACKING "Verfolgung"
-#define L_TRACKING_RATE "Nachf&uuml;hrgeschwindigkeit"
 #define L_CURRENT_MAXRATE "Aktuelle maximale Rate"
 #define L_DEFAULT_MAXRATE "Standard maximale Rate"
 #define L_CURRENT_MAXSLEW "Maximale Schwenkgeschwindigkeit"
 
+#define L_FREQUENCY_ADJUST "Frequenzanpassung"
+
 // driver status
-#define L_DRIVER_STATUS "Teriber"
-#define L_STATE "Status"
+#define L_DRIVER "Teriber"
+#define L_STATUS "Status"
+#define L_STATE "Zustand"
 #define L_COMMS_FAILURE "Befehlsfehler"
-#define L_STANDSTILL "Stillstand"
-#define L_OPEN_LOAD "Offene Last"
+#define L_STANDSTILL "Dtillstand"
+#define L_OPEN_LOAD "Offene last"
 #define L_SHORT_GND "Masseschluss"
 #define L_SHUTDOWN_OVER "Abschaltung &uuml;ber"
 #define L_PRE_WARNING "Vorwarnung"
@@ -137,6 +146,7 @@
   #define SIDEREAL_CH "&#9733;"
   #define LUNAR_CH "&#9790;"
   #define SOLAR_CH "&#9737;"
+  #define KING_CH "&#9812;"
 #else
   #define HOME_CH "H"
   #define ARROW_DR "-&gt;"
@@ -155,6 +165,7 @@
   #define SIDEREAL_CH "*"
   #define LUNAR_CH "("
   #define SOLAR_CH "O"
+  #define KING_CH "K"
 #endif
 
 #define BUTTON_N "N"
@@ -163,36 +174,30 @@
 #define BUTTON_W "W"
 #define BUTTON_SYNC "@"
 
-#define L_CENTER_RATE "Cntr"
-#define L_FIND_RATE "Suchen"
-#define L_FAST_RATE "Schnell"
-#define L_VFAST_RATE "Ultra"
-
 #define L_HINT_CLOCK "Setze Datum/Zeit"
 #define L_HINT_CONTINUE_GOTO "Setze Goto fort (wenn pausiert bei Homeposition)"
-#define L_HINT_FIND_HOME "Suche Homeposition"
-#define L_HINT_RESET_HOME "Homeposition (Reset)"
-#define L_HINT_UNPARK "Entparken"
-#define L_HINT_PARK "Parken"
+#define L_HOME_PARK_TITLE "Referenzieren und Parken"
+#define L_FIND_HOME "Suche Homeposition"
+#define L_RESET_HOME "Homeposition (Reset)"
+#define L_UNPARK "Entparken"
+#define L_PARK "Parken"
 #define L_HINT_EMERGENCY_STOP "Notfall Stop!"
 #define L_HINT_RATE_SIDEREAL "Sterngeschwindigkeit"
 #define L_HINT_RATE_LUNAR "Mondgeschwindigkeit"
 #define L_HINT_RATE_SOLAR "Sonnengeschwindigkeit"
+#define L_HINT_RATE_KING "Königstarif"
 #define L_HINT_FOC_SEL "W&auml;hle Fokussierer"
-#define L_HINT_FOC_FIND_HOME "Suche Fokussierer Homeposition"
-#define L_HINT_FOC_RESET_HOME "Home (Reset) Fokussierer"
-#define L_HINT_ROT_FIND_HOME "Suche Rotator Home"
-#define L_HINT_ROT_RESET_HOME "Home (Reset) Rotator"
-#define L_HINT_DEROTATE_ON "De-Rotation An"
-#define L_HINT_ROTATOR_REV "umgekehrte Rotator-Richtung"
+#define L_HINT_DEROTATE_ON "Derotation An"
+#define L_HINT_ROTATOR_REV "umgekehrte Derotator-Richtung"
 #define L_HINT_ROTATOR_PAR "Bewege Rotator zum parallaktischen Winkel"
-#define L_HINT_DEROTATE_OFF "De-Rotation Aus"
+#define L_HINT_DEROTATE_OFF "Derotation Aus"
 
 #define L_ALIGN "Align"
 #define L_AUX_FEATURES "Zusatzfunktionen"
 
 #define L_FOCUSER "Fokussierer"
 #define L_ROTATOR "Rotator"
+#define L_DEROTATOR "Derotator"
 #define L_CAMERA_EXPOSURE "Exposition"
 #define L_CAMERA_DELAY "Verzögern"
 #define L_CAMERA_COUNT "Anzahl"
@@ -216,6 +221,7 @@
 #define L_CAT_NO_NAME "Gew&auml;hlter Katalog hat keinen Namen."
 #define L_CAT_GET_NAME_FAIL "Namensselektion f&uuml;r gew&auml;hlten Katalog fehlgeschlagen."
 #define L_CAT_NO_CAT "Kein Katalog gew&auml;hlt."
+#define L_CAT_NO_OBJECT "Kein Objekt ausgewählt."
 #define L_SELECTED "gew&auml;hlt"
 #define L_CAT_DOWNLOAD_FAIL "Download fehlgeschlagen. Ung&uuml;ltige Daten."
 #define L_CAT_DOWNLOAD_SUCCESS "Download erfolgreich."
@@ -244,34 +250,20 @@
 // --------------------------- Encoders --------------------------
 
 // general settings
-#define L_ENC_SYNC_TO_ENC "Syncronisiere OnStep zu Encodern"
-#define L_ENC_SYNC_TO_ONS "Syncronisiere Encoder zu OnStep"
-#define L_ENC_ZERO_TO_ONS "Stellen Sie Absolute Encoder Zero auf OnStep"
-#define L_ENC_AUTO_SYNC "Synchronisiere automatisch OnStep zu Encodern"
+#define L_ENC_SYNC_TO_ENC "OnStep -> Encoder synchronisieren"
+#define L_ENC_SYNC_TO_ONS "Encoder -> OnStep synchronisieren"
+#define L_ENC_ORIGIN_TO_ONS "Stellen Sie OnStep -> Encoders Origin ein"
+#define L_ENC_AUTO_SYNC "Encoder -> OnStep automatisch synchronisieren"
 #define L_ENC_CONF "Encoder-Konfiguration"
 #define L_ENC_SET_TPD "Zählt pro Grad"
-#define L_ENC_MAX_ANGLE "Maximale Winkeldistanz (Encoder verglichen mit OnStep)"
-#define L_ENC_MAX_ANGLE_AXIS1 "(Axis1, Bogensekunden 0 to 9999)"
-#define L_ENC_MAX_ANGLE_AXIS2 "(Axis2, Bogensekunden 0 to 9999)"
+#define L_ENC_SYNC_THLD "Sync-Schwelle"
+#define L_ENC_SYNC_THLD_UNITS "0 bis 9999 Bogensekunden"
 #define L_ENC_AUTO_RATE "OnStep Raten Steuerung"
-#define L_ENC_SYNC_NOW "Jetzt"
-
-// encoder rate control
-#define L_ENC_BINNED_SAMPLES "Mittelwertbildung Encoderwerte (binning)"
-#define L_ENC_SAMPLES "Mittelwertbildung Encoderwerte (Werte)"
-#define L_ENC_PROPORTIONAL "Proportionale Reaktion"
-#define L_ENC_MIN_GUIDE "Minimum Nachf&uuml;hrung"
-#define L_ENC_RATE_COMP "Encoder Geschwindigkeitskompensation"
-#define L_ENC_MAGN "Umfang"
-#define L_ENC_PHASE "Phase"
-#define L_ENC_COUNTS "Anzahl"
-#define L_ENC_STAT_RATE_AXIS1 "Axis1 Rate (sidereal)"
-#define L_ENC_STAT_INTPOL_COMP "Intpol Comp"
-#define L_ENC_STAT_INTPOL_PHASE "Intpol Phase"
+#define L_NOW "Jetzt"
 
 // ------------------------------ PEC ----------------------------
 
-#define L_PEC_STATUS "PEC Status"
+#define L_PEC_STATUS "Status"
 #define L_PEC_CONTROL "PEC Steuerung"
 #define L_PEC_PLAY "Abspielen"
 #define L_STOP "Stop"
@@ -280,7 +272,7 @@
 #define L_PEC_CLEAR_MESSAGE "L&ouml;schen l&ouml;scht den Speicher aber nicht den EEPROM.  W&auml;hrend der Aufnahme werden die Korrekturen 3:1 gemittelt, wobei der Puffer bevorzugt wird, es sei denn, er wird gel&ouml;scht. In diesem Fall wird die volle Korrektur verwendet."
 #define L_PEC_EEWRITE "Schreibe in EEPROM"
 #define L_PEC_EEWRITE_MESSAGE "Schreibt PEC-Daten in das EEPROM, damit diese verf&uuml;gbar sind wenn die Steuerung neu startet.  Das Schreiben der Daten kann einige Sekunden dauern."
-#define L_PEC_NO_PEC_MESSAGE "PEC STEUERUNG DEAKTIVIERT"
+#define L_DISABLED_MESSAGE "DEAKTIVIERT"
 #define L_PEC_IDLE "Leerlauf"
 #define L_PEC_WAIT_PLAY "Abspielen wartet auf Start"
 #define L_PEC_PLAYING "Abspielen"
@@ -299,6 +291,7 @@
 
 #define L_PARK "Parken"
 #define L_SET_PARK "Setze Parkposition"
+#define L_SET_PARK_CURRENT_COORDS "Parkposition auf aktuelle Koordinaten setzen"
 
 #define L_TRK_FASTER "schneller"
 #define L_TRK_SLOWER "langsamer"
@@ -314,6 +307,7 @@
 #define L_MERIDIAN_FLIP_AUTO "Automatischer Meridianflip bei Grenz&uuml;berschreitung"
 #define L_MERIDIAN_FLIP_NOW "Jetzt"
 #define L_MERIDIAN_FLIP_PAUSE "Pausiere an Homeposition w&auml;hrend Meridian Flip"
+#define L_MERIDIAN_FLIP_PPS "Meridianflip, bevorzugte Pierseite"
 
 // ------------------------ Configuration ------------------------
 
@@ -322,21 +316,25 @@
 #define L_MAX_SLEW_SPEED "Maximale Schwenkgeschwindigkeit"
 
 // goto Rate
-#define L_VSLOW "Sehr langsam (0.5x)"
-#define L_SLOW "Langsam (0.75x)"
-#define L_NORMAL "Normal (1x)"
-#define L_FAST "Schnell (1.5x)"
-#define L_VFAST "Sehr schnell (2x)"
+#define L_VSLOW "Sehr langsam"
+#define L_SLOW "Langsam"
+#define L_NORMAL "Normal"
+#define L_FAST "Schnell"
+#define L_VFAST "Sehr schnell"
 
 // backlash
+#define L_BACKLASH "Getriebespiel"
 #define L_BACKLASH_RANGE_AXIS1 "Getriebespiel, in Bogensekunden 0 to 3600"
 #define L_BACKLASH_RANGE_AXIS2 "Getriebespiel, in Bogensekunden 0 to 3600"
-#define L_BACKLASH_RANGE_AXIS345 "Spiel in den Schritten 0 bis 32767"
+#define L_BACKLASH_RANGE_AXIS3UP "Spiel in den Schritten 0 bis 32767"
 
 // deadband/TCF
-#define L_DEADBAND_RANGE_AXIS45 "TCF Deadband, in den Schritten 1 bis 32767"
-#define L_TCF_COEF_RANGE_AXIS45 "TCF Coef, in Mikrometern / Grad C -999,0 bis 999,0"
-#define L_TCF_COEF_EN_AXIS45 "TCF aktivieren, 0 falsch oder 1 wahr"
+#define L_DEADBAND "TCF Deadband"
+#define L_TCF_COEF "TCF Coef"
+#define L_TCF_COEF_EN "TCF aktivieren"
+#define L_DEADBAND_RANGE_AXIS4UP "TCF Deadband, in den Schritten 1 bis 32767"
+#define L_TCF_COEF_RANGE_AXIS4UP "TCF Coef, in Mikrometern/Grad C &pm;999,0"
+#define L_TCF_COEF_EN_AXIS4UP "TCF aktivieren, 0 falsch oder 1 wahr"
 
 // limits
 #define L_LIMITS_TITLE "Horizont- und Overhead-Grenzen"
@@ -346,7 +344,7 @@
 #define L_LIMITS_RANGE_MERIDIAN_W "Nach Meridian wenn Teleskop auf Westseite der Montierung, in Grad +/- 270"
 
 // location
-#define L_LOCATION_TITLE "Seite Standort Breite, Länge, UTC-Versatz"
+#define L_LOCATION_TITLE "Zeit und Ort"
 #define L_LOCATION_LONG "L&auml;ngengad, in Grad +/- 180, W is +"
 #define L_LOCATION_LAT "Breitengrad, in Grad +/- 90, N is +"
 #define L_LOCATION_RANGE_UTC_OFFSET "UTC Offset, in Stunden -14 to +12"
@@ -355,27 +353,44 @@
 // advanced configuration
 #define L_REVERT "Auf Standard zurücksetzen"
 #define L_ADV_SET_TITLE "Fortgeschrittene"
-#define L_ADV_SET_HEADER_MSG "Die folgenden Änderungen werden nach dem Neustart von OnStep wirksam:"
-#define L_ADV_MOUNT_TYPE "Wählen 1 GEM, 2 EQ Fork, 3 Alt/Azm"
+#define L_ADV_SET_HEADER_MSG "sofern nicht anders angegeben, werden die unten aufgeführten Änderungen nach dem Neustart von OnStep wirksam:"
+#define L_ADV_MOUNT_TYPE " wählen 1 GEM, 2 EQ Fork, 3 Alt/Azm"
+#define L_ADV_BOOL "0 falsch oder 1 wahr"
 
 #define L_ADV_SET_SPWR "Schritte pro Schneckendrehung (0 zum Deaktivieren)"
 #define L_ADV_SET_SPD "Schritte pro Grad"
 #define L_ADV_SET_SPM "Schritte pro Mikron"
-#define L_ADV_SET_us  "Mikroschritte"
-#define L_ADV_SET_ma  "Strom in Milliampere, <i>Vorsicht!</i>"
+
 #define L_ADV_SET_REV "Umgekehrte Richtung, 0 falsch oder 1 wahr"
 #define L_ADV_SET_MIN "Mindestposition"
 #define L_ADV_SET_MAX "Maximale Position"
+
+#define L_ADV_SET_SPECIAL "Step/Dir Driver:<br /><br />Ein Wert von -1 entspricht Config.h OFF. <i>Seien Sie vorsichtig damit!</i>"
+#define L_ADV_SET_IMMEDIATE "Servotreiber:<br /><br />Einstellungen werden sofort wirksam, kein Neustart erforderlich. <i>Seien Sie vorsichtig damit!</i>"
+#define L_ADV_SET_TRAK_us "Mikroschritte"
+#define L_ADV_SET_GOTO_us "Mikroschritte Goto"
+#define L_ADV_SET_HOLD_ma "mA Strom halten"
+#define L_ADV_SET_TRAK_ma "mA Tracking-Strom"
+#define L_ADV_SET_SLEW_ma "mA Schwenkstrom"
+#define L_ADV_SET_P "Verfolgung Porportional"
+#define L_ADV_SET_I "Verfolgung Integral"
+#define L_ADV_SET_D "Verfolgung Ableitung"
+#define L_ADV_SET_P_GOTO "Schwenken Porportional"
+#define L_ADV_SET_I_GOTO "Schwenken Integral"
+#define L_ADV_SET_D_GOTO "Schwenken Ableitung"
+
 #define L_ADV_ENABLE "Aktivieren Sie die erweiterte Konfiguration"
 #define L_ADV_DISABLE "Deaktivieren Sie die erweiterte Konfiguration (alle Standardeinstellungen beim Neustart)"
+#define L_ADV_SET_AXIS_NO_EDIT "Die Bearbeitung dieser Achse ist derzeit deaktiviert."
 #define L_ADV_SET_NO_EDIT "Deaktivieren Sie die erweiterte Konfiguration (alle Standardeinstellungen beim Neustart)"
 #define L_ADV_SET_FOOTER_MSG1 "Beachten Sie nach dem Drücken von [Upload] die obigen Änderungen, da der Upload möglicherweise aufgrund eines ungültigen Parameters abgelehnt wurde."
 #define L_ADV_SET_FOOTER_MSG2 "Wenn Sie [Zurücksetzen] wählen, kann diese Gruppe erst bearbeitet werden, wenn Sie OnStep neu starten."
-#define L_ADV_SET_FOOTER_MSG3 "Wenn IRUN nicht auf die Standardeinstellung Config.h eingestellt ist, sind IHOLD und IGOTO deaktiviert (AUS)."
+#define L_ADV_SET_FOOTER_MSG3 "Wenn IRUN auf einen anderen Wert als den Standardwert von Config.h eingestellt ist, wird IHOLD auf 50% (HALF) eingestellt."
 #define L_ADV_SET_FOOTER_MSG4 "Durch Ändern des Verhältnisses von Axis1-Schritten pro Wurmdrehung und Schritten pro Grad kann der Speicherbereich von Library NV beschädigt werden. Sichern Sie bei Bedarf zuerst alle Kataloge."
 
 // reset control
 #define L_RESET_TITLE "OnStep Steuerung zurücksetzen:"
+#define L_WIPE_RESET "Einstellungen zurücksetzen und OnStep neu starten"
 #define L_RESET "Zurücksetzen OnStep"
 #define L_RESET_FWU "Zurücksetzen OnStep zum Hochladen der Firmware"
 #define L_RESET_MSG1 "OnStep muss zu Hause oder geparkt sein, andernfalls wird die Rücksetzanforderung ignoriert."
@@ -420,7 +435,7 @@
 // --------------------------- Constants -------------------------
 
 #define L_DOWN_TITLE "Serielles Interface zur OnStep ist nicht verbunden!"
-#define L_DOWN_MESSAGE1 "Aus- und Wiedereinschalten kann helfen, wenn es eine Unstimmigkeit mit der Baudrate gibt<br /><br />"
+#define L_DOWN_MESSAGE1 "Aus- und Wiedereinschalten kann helfen, wenn es eine Unstimmigkeit mit der Baudrate gibt."
 #define L_DOWN_MESSAGE2 "Andere m&ouml;gliche Gr&uuml;nde:<br /><ul>"
 #define L_DOWN_MESSAGE3 "Inkorrekt konfigurierte OnStep Baudrate."
 #define L_DOWN_MESSAGE4 "Inkorrekt konfigurierte ESP Baudrate."
@@ -428,15 +443,16 @@
 #define L_DOWN_MESSAGE6 "Inkorrekte Verkabelung der  COM-Ports (oder Hardwareschaden wenn RX/TX vertauscht wurden.)"
 #define L_DOWN_MESSAGE7 "Incorrekte Verkabelung der Stromversorgungs-Pins. Masse (GND) muss zwischen OnStep's MCU und der MCU des Addon's verbunden sein."
 
-#define L_PAGE_STATUS "Status"
-#define L_PAGE_CONTROL "Steuerung"
-#define L_PAGE_AUX "Hilfs"
+#define L_CONTROLLER "Status"
+#define L_PAGE_MOUNT "Steuerung"
+#define L_PAGE_AUXILIARY "Hilfs"
 #define L_PAGE_LIBRARY "Bibliothek"
 #define L_PAGE_ENCODERS "Encoder"
 #define L_PAGE_PEC "PEC"
-#define L_PAGE_SETTINGS "Einstellungen"
+#define L_SETTINGS "Einstellungen"
+#define L_CONTROLS "Kontrollen"
 #define L_PAGE_CONFIG "Konfig."
-#define L_PAGE_SETUP "Netzwerk"
+#define L_PAGE_NETWORK "Netzwerk"
 
 // ------------------------- MountStatus -------------------------
 

@@ -18,8 +18,30 @@ class NonVolatileStorage {
     // result:      true if the device was found, or false if not
     virtual bool init(uint16_t size, bool cacheEnable, uint16_t wait, bool checkEnable, TwoWire* wire = NULL, uint8_t address = 0);
 
-    // disables writing if true, defaults to false
-    void readOnly(bool state);
+    // protects already written data if true, defaults to false
+    void setReadOnly(bool state);
+
+    // check to see if read only operation is set
+    inline bool isReadOnly() { return readOnlyMode; }
+
+    // wait for all commits to finish, blocking
+    void wait();
+
+    // returns true if NV holds the correct key value in addresses 0..4
+    // except returns false if #define NV_WIPE ON exists
+    bool isKeyValid(uint32_t uniqueKey);
+
+    // returns true if the NV key was checked and correct
+    inline bool hasValidKey() { return keyMatches; }
+
+    // write the key value into addresses 0..3
+    void writeKey(uint32_t uniqueKey);
+
+    // write pattern to all nv memory
+    void wipe(uint8_t j = 0);
+
+    // verify and wipe nv
+    bool verify();
 
     // call frequently to perform any operations that need to happen in the background
     virtual void poll(bool disableInterrupts = true);
@@ -84,18 +106,23 @@ class NonVolatileStorage {
     inline void update(uint16_t i,   double j) { updateBytes(i, (uint8_t*)&j, sizeof(double)); }
     inline void update(uint16_t i,    char* j) { updateBytes(i, j, strlen(j) + 1); }
 
-    // read count bytes (up to 64) starting at position i into value j
+    // checks bytes for null (up to 32767) starting at position i into value j
+    // for char arrays a negative count represents the maximum length read (if a terminating null is not found)
+    bool isNull(uint16_t i, int16_t count);
+    // read count bytes (up to 32767) starting at position i into value j
     // for char arrays a negative count represents the maximum length read (if a terminating null is not found)
     void readBytes(uint16_t i, void *j, int16_t count);
-    // update count bytes (up to 64) starting at position i from value j
+    // update count bytes (up to 32767) starting at position i from value j
     // for char arrays a negative count represents the maximum length to write (if a terminating null is not found)
     void updateBytes(uint16_t i, void *j, int16_t count);
-    // write count bytes (up to 64) starting at position i from value j
+    // write count bytes (up to 32767) starting at position i from value j
     // for char arrays a negative count represents the maximum length to write (if a terminating null is not found)
     inline void writeBytes(uint16_t i, void *j, int16_t count) { updateBytes(i, j, count); }
 
     // NV size in bytes
     uint16_t size = 0;
+
+    bool initError = false;
 
   protected:
     // returns false if ready to read or write immediately
@@ -107,6 +134,13 @@ class NonVolatileStorage {
     // write value j to position i in storage 
     virtual void writeToStorage(uint16_t i, uint8_t j);
 
+    // write value j of count bytes to position starting at i in storage
+    // these writes must be aligned with the page size!
+    virtual void writePageToStorage(uint16_t i, uint8_t *j, uint8_t count) { writeToStorage(i, *j); (void)(count); }
+
+    // default page write size is 1
+    int pageWriteSize = 1;
+
     bool readAndWriteThrough = false;
     bool readOnlyMode = false;
 
@@ -116,8 +150,11 @@ class NonVolatileStorage {
     uint16_t cacheStateSize = 0;
     uint8_t* cacheStateRead;
     uint8_t* cacheStateWrite;
+    uint16_t cacheSizeDirtyCount = 0;
 
     uint32_t waitMs = 0;
+
+    bool keyMatches = false;
 
     // a quick to access flag to tell us if delayed commit is enabled
     bool delayedCommitEnabled = false;

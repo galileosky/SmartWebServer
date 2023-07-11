@@ -8,14 +8,17 @@
 // New symbol for the default I2C port ---------------------------------------------------------------
 #include <Wire.h>
 #define HAL_Wire Wire
-#define HAL_WIRE_CLOCK 100000
+#ifndef HAL_WIRE_CLOCK
+  #define HAL_WIRE_CLOCK 100000
+#endif
 
 // Default serial port where OnStep is attached ------------------------------------------------------
 #define SERIAL_ONSTEP Serial1
 
 // Non-volatile storage ------------------------------------------------------------------------------
-#ifdef NV_DEFAULT
+#if NV_DRIVER == NV_DEFAULT
   #include "../lib/nv/NV_EEPROM.h"
+  #define HAL_NV_INIT() 
 #endif
 
 //---------------------------------------------------------------------------------------------------
@@ -24,6 +27,3 @@
 
 //-----------------------------------------------------------------------------------------------------
 // Misc. includes and defines to support this processor's operation
-#define IRAM_ATTR
-#define ICACHE_RAM_ATTR
-#define FPSTR
