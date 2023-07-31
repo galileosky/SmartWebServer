@@ -26,7 +26,7 @@
                                           //              ***     WEAR AND DAMAGE THE MICROCONTROLLER NV SUBSYSTEM !!!        ***
 
 // STATUS LED ----------------------------------------------------------------------------------------------------------------------
-#define LED_STATUS_ON_STATE           LOW //         LOW, Use HIGH so indicator stays on when connected if needed.            Option
+#define LED_STATUS_ON_STATE          HIGH //         LOW, Use HIGH so indicator stays on when connected if needed.            Option
 
 // PASSWORD ------------------------------------------------------------------------------------------------------------------------
 #define PASSWORD_DEFAULT       "galileo1" //  "password", Adjust as required, this can be changed at runtime also.            Adjust
@@ -50,7 +50,7 @@
 #define AP_ENABLED                   true //        true, Wifi Access Point Enabled.                                          Adjust
 #define AP_SSID            "OnStepAP-SWS" //    "ONSTEP", Wifi Access Point SSID.                                             Adjust
 #define AP_PASSWORD            "galileo1" //  "password", Wifi Access Point password.                                         Adjust
-#define AP_CHANNEL                      7 //           7, Wifi Access Point channel.                                          Adjust
+#define AP_CHANNEL                      8 //           7, Wifi Access Point channel.                                          Adjust
 #define AP_IP_ADDR         {192,168,10,1} // ..,168,0,1}, Wifi Access Point IP Address.                                       Adjust
 #define AP_GW_ADDR         {192,168,10,1} // ..,168,0,1}, Wifi Access Point GATEWAY Address.                                  Adjust
 #define AP_SN_MASK        {255,255,255,0} // ..55,255,0}, Wifi Access Point SUBNET Mask.                                      Adjust
