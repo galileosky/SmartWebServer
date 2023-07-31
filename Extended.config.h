@@ -48,7 +48,7 @@
 // These settings are stored in NV (EEPROM) and the SWS will not recognize the settings below except on the first upload unless
 // NV is wiped, these settings (where applicable) can be changed at runtime however.
 #define AP_ENABLED                   true //        true, Wifi Access Point Enabled.                                          Adjust
-#define AP_SSID            "OnStepAP-SWS" //    "ONSTEP", Wifi Access Point SSID.                                             Adjust
+#define AP_SSID         "PerseusMini-SWS" //    "ONSTEP", Wifi Access Point SSID.                                             Adjust
 #define AP_PASSWORD            "galileo1" //  "password", Wifi Access Point password.                                         Adjust
 #define AP_CHANNEL                      7 //           7, Wifi Access Point channel.                                          Adjust
 #define AP_IP_ADDR         {192,168,10,1} // ..,168,0,1}, Wifi Access Point IP Address.                                       Adjust
