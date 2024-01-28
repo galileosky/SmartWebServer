@@ -100,6 +100,7 @@
 // NV/EEPROM
 #define NV_KEY_VALUE                111111111UL
 
+#define NV_DEF                      0
 #define NV_DEFAULT                  0
 #define NV_2416                     1  // 2KB I2C EEPROM AT DEFAULT ADDRESS 0x50
 #define NV_2432                     2  // 4KB I2C EEPROM AT DEFAULT ADDRESS 0x50
@@ -107,12 +108,13 @@
 #define NV_24128                    4  // 16KB I2C EEPROM AT DEFAULT ADDRESS 0x50
 #define NV_24256                    5  // 32KB I2C EEPROM AT DEFAULT ADDRESS 0x50
 #define NV_AT24C32                  6  // 4KB I2C EEPROM AT DEFAULT ADDRESS 0x57 (ZS-01 module for instance)
-#define NV_MB85RC256                7  // 32KB I2C FRAM AT DEFAULT ADDRESS 0x50
+#define NV_MB85RC64                 7  // 8KB I2C FRAM AT DEFAULT ADDRESS 0x50
+#define NV_MB85RC256                8  // 32KB I2C FRAM AT DEFAULT ADDRESS 0x50
 
 #define NVE_LOW                     0   // low (< 100K writes)
 #define NVE_MID                     1   // mid (~ 100K writes)
 #define NVE_HIGH                    2   // high (~ 1M writes)
-#define NVE_VHIGH                   3   // very high (> 1M writes)
+#define NVE_VHIGH                   3   // very high (> 300M writes, FRAM)
 
 // GPIO devices (pin# 512 up to 543)
 // these can work for most digital I/O EXCEPT: STEP/DIR, 1-WIRE/I2C/SPI (CS is ok), the ST4 port, and the PPS pin

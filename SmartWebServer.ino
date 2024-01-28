@@ -31,8 +31,8 @@
 
 #define Product "Smart Web Server"
 #define FirmwareVersionMajor  "2"
-#define FirmwareVersionMinor  "06"
-#define FirmwareVersionPatch  "i"
+#define FirmwareVersionMinor  "08"
+#define FirmwareVersionPatch  "b"
 
 // Use Config.h to configure the SWS to your requirements
 
@@ -99,6 +99,10 @@ void setup(void) {
   // start debug serial port
   if (DEBUG == ON || DEBUG == VERBOSE || DEBUG == PROFILER) SERIAL_DEBUG.begin(SERIAL_DEBUG_BAUD);
   delay(2000);
+
+  #ifdef PIN_INIT
+    PIN_INIT();
+  #endif
 
   VF("MSG: SmartWebServer "); VL(firmwareVersion.str);
   VF("MSG: MCU = "); VF(MCU_STR); V(", "); VF("Pinmap = "); VLF(PINMAP_STR);
