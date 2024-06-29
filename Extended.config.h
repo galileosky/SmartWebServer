@@ -3,6 +3,11 @@
 
 //                                 *** Most users will not change anything in this file! ***
 
+//use default WIFI AP settings
+#define __DEFAULT_WIFI_AP__
+
+
+
 // ---------------------------------------------------------------------------------------------------------------------------------
 // ADJUST THE FOLLOWING TO CONFIGURE YOUR CONTROLLER FEATURES ----------------------------------------------------------------------
 // <-Req'd = always must set, <-Often = usually must set, Option = optional, Adjust = adjust as req'd, Infreq = infrequently changed
@@ -29,8 +34,15 @@
 #define LED_STATUS_ON_STATE          HIGH //         LOW, Use HIGH so indicator stays on when connected if needed.            Option
 
 // PASSWORD ------------------------------------------------------------------------------------------------------------------------
-#define PASSWORD_DEFAULT       "galileo1" //  "password", Adjust as required, this can be changed at runtime also.            Adjust
+#ifdef __DEFAULT_WIFI_AP__
+  #define PASSWORD_DEFAULT       "password" //  "password", Adjust as required, this can be changed at runtime also.            Adjust
                                           //              password for runtime access to network settings.
+
+#else
+  #define PASSWORD_DEFAULT       "galileo1" //  "password", Adjust as required, this can be changed at runtime also.            Adjust
+                                          //              password for runtime access to network settings.
+#endif
+
 
 // BLE GAMEPAD SETTINGS (ESP32 ONLY) ------------------------------------------------ see https://onstep.groups.io/g/main/wiki/26762
 #define BLE_GAMEPAD                   OFF //         OFF, ON to allow BLE gamepad connection for ESP32 only.                  Option
@@ -50,11 +62,25 @@
 // These settings are stored in NV (EEPROM) and the SWS will not recognize the settings below except on the first upload unless
 // NV is wiped, these settings (where applicable) can be changed at runtime however.
 #define AP_ENABLED                   true //        true, Wifi Access Point Enabled.                                          Adjust
-#define AP_SSID         "PerseusNano-SWS" //    "ONSTEP", Wifi Access Point SSID.                                             Adjust
-#define AP_PASSWORD            "galileo1" //  "password", Wifi Access Point password.                                         Adjust
+
+#ifdef __DEFAULT_WIFI_AP__
+  #define AP_SSID                  "ONSTEP" //    "ONSTEP", Wifi Access Point SSID.                                             Adjust
+  #define AP_PASSWORD            "password" //  "password", Wifi Access Point password.                                         Adjust
+#else
+  #define AP_SSID         "PerseusNano-SWS" //    "ONSTEP", Wifi Access Point SSID.                                             Adjust
+  #define AP_PASSWORD            "galileo1" //  "password", Wifi Access Point password.                                         Adjust
+#endif
+
 #define AP_CHANNEL                      8 //           7, Wifi Access Point channel.                                          Adjust
-#define AP_IP_ADDR         {192,168,10,1} // ..,168,0,1}, Wifi Access Point IP Address.                                       Adjust
-#define AP_GW_ADDR         {192,168,10,1} // ..,168,0,1}, Wifi Access Point GATEWAY Address.                                  Adjust
+
+//#ifdef __DEFAULT_WIFI_AP__
+//  #define AP_IP_ADDR          {192,168,0,1} // ..,168,0,1}, Wifi Access Point IP Address.                                       Adjust
+//  #define AP_GW_ADDR          {192,168,0,1} // ..,168,0,1}, Wifi Access Point GATEWAY Address.                                  Adjust
+//#else
+  #define AP_IP_ADDR         {192,168,10,1} // ..,168,0,1}, Wifi Access Point IP Address.                                       Adjust
+  #define AP_GW_ADDR         {192,168,10,1} // ..,168,0,1}, Wifi Access Point GATEWAY Address.                                  Adjust
+//#endif
+
 #define AP_SN_MASK        {255,255,255,0} // ..55,255,0}, Wifi Access Point SUBNET Mask.                                      Adjust
 
 #define STA_ENABLED                 false //       false, Wifi Station Enabled.                                               Adjust
