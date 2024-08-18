@@ -4,7 +4,7 @@
 //                                 *** Most users will not change anything in this file! ***
 
 //use default WIFI AP settings
-#define __DEFAULT_WIFI_AP__
+//#define __DEFAULT_WIFI_AP__
 
 
 
